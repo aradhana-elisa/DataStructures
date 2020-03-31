@@ -1,15 +1,19 @@
-//Binary Heap - Heap is a tree structure, similar to BST but with different rules.
-// MaxBinary Heap - each node can have atmost two children and parent is always larger than the children. no order to left vs right.
-// For Every index of array n -> Left child is stored at 2n+1 and Right Child is stored at 2n+2
+class Node{
+    constructor(val ,priority){
+        this.val = val;
+        this.priority = priority;
+    }
+}
 
-class MaxBinaryHeap {
+//In this code : lower value - highest priority 
+class PriorityQueue {
     constructor(){
         this.values = [];
     }
 
-    insert(element){
-        // add the element at the end
-        this.values.push(element);
+    enqueue(value, priority){
+        let newNode = new Node(val, priority);
+        this.values.push(newNode); // add it to very end 
         //bubble up
         this.bubbleUp();
     }
@@ -20,7 +24,7 @@ class MaxBinaryHeap {
         while(idx > 0){
             let parentIdx = Math.floor((idx - 1)/2);
             let parent = this.values[parentIdx];
-            if(element <= parent) break;
+            if(element.priority >= parent.priority) break;
             this.values[parentIdx] = element;
             this.values[idx] = parent;
             idx = parentIdx;
@@ -28,14 +32,14 @@ class MaxBinaryHeap {
     }
 
     //removing - the highest value (root)
-    extractMax(){
-        let max = this.values[0];
+    dequeue(){
+        let min = this.values[0];
         let end = this.values.pop();
         if(this.values.length > 0){
             this.values[0] = end;
             this.sinkDown();
         }        
-        return max;
+        return min;
     }
 
     sinkDown(){
@@ -53,14 +57,14 @@ class MaxBinaryHeap {
             //check index in bound
             if(leftChidIndex < length){
                 leftChild = this.values[leftChidIndex];
-                if(leftChild>element){
+                if(leftChild.priority < element.priority){
                     swap = leftChidIndex;
                 }
             }
 
             if(rightChidIndex < length){
                 rightChild = this.values[rightChidIndex];
-                if((swap == null && rightChild>element) || (swap !== null && rightChild > leftChild)){
+                if((swap == null && rightChild.priority < element.priority) || (swap !== null && rightChild.priority < leftChild.priority)){
                     swap = rightChildIndex;
                 }
             }
